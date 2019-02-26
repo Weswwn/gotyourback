@@ -1,0 +1,67 @@
+public class Main {
+
+	static String checkGeneralSeats;
+	static String checkRestrictedSeats;
+	static String courseCodeString;
+	static String courseNumberString;
+	static String courseSectionString;
+	static String emailAddressString;
+	static String phoneNumberString;
+
+	public static void main(String[] args) throws InterruptedException {
+		// what to do here
+	}
+
+	public void setCourseCodeString(String courseCode) {
+		courseCodeString = courseCode;
+	}
+
+	public void setCourseNumberString(String courseNumber) {
+		courseNumberString = courseNumber;
+	}
+
+	public void setCourseSectionString(String courseSection) {
+		courseSectionString = courseSection;
+	}
+
+	public void setEmailAddressString(String emailAddress) {
+		emailAddressString = emailAddress;
+	}
+
+	public void setPhoneNumberString(String phoneNumber) {
+		phoneNumberString = phoneNumber;
+	}
+
+	public Course userInput() {
+		Course course = new Course(courseCodeString, courseNumberString, courseSectionString);
+		User user = new User(course, emailAddressString, phoneNumberString);
+		return course;
+	}
+}
+
+
+/* 
+ * Course.java
+ * https://codeshare.io/G6DbvO
+ * 
+ * Observer.java
+ * https://codeshare.io/G8VLZA
+ * 
+ * User.java
+ * https://codeshare.io/G8VLVA
+ * 
+ * sendSMS.java
+ * https://codeshare.io/G6logg
+ *
+ * Front End index.html
+ * https://codeshare.io/am3kVW
+ * 
+ * CSS
+ * https://codeshare.io/5zqA0W
+ * 
+ * Javascript
+ * https://codeshare.io/5D7EDO
+ * 
+ * Servlet1
+ * https://codeshare.io/G6lk0Q
+ */
