@@ -1,0 +1,44 @@
+
+public class User extends Observer {
+
+	String emailAddressString;
+	String phoneNumberString;
+
+	public User(Course course, String emailAddressString, String phoneNumberString) {
+		this.course = course;
+		this.course.registerUser(this);
+		this.emailAddressString = emailAddressString;
+		this.phoneNumberString = phoneNumberString;
+	}
+	
+	public String getEmailAddressString() {
+		return emailAddressString;
+	}
+	
+	public String getPhoneNumberString() {
+		return phoneNumberString;
+	}
+
+	public void sendNotification(int seatType) {
+		//send text or email to database of people who have requested to track this message
+
+		String seat = (seatType == 0) ? "general seat" : ((seatType == 1) ? "restricted seat" : "seat");
+		String message = "A course you have entered is not empty! There is a " +  seat + " open for "
+				+ course.getCourseCodeString() + " " + course.getCourseNumberString() + " "
+				+ course.getCourseSectionString() + ". Register at: " + course.getURL() + ".";
+		
+		System.out.println(message);
+
+		if (!emailAddressString.isEmpty()) {
+			// sendEmail(emailAddressString, message);
+		}
+		if (!phoneNumberString.isEmpty()) {
+			// sendText(phoneNumberString, message);
+		}
+	}
+
+	@Override
+	public void update(int seatType) {
+		sendNotification(seatType);
+	}
+}
