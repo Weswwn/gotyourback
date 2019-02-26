@@ -1,0 +1,129 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+public class Course {
+
+	String URL;
+	String courseCodeString;
+	String courseNumberString;
+	String courseSectionString;
+	int generalSeats;
+	int restrictedSeats;
+	int seatType;
+	int seats[];
+	List<Observer> users = new ArrayList<Observer>();
+	
+	// Each course has a list of users 'following' it. All its users will be notified once a seat is open.
+	// Each course will be checked every 30 seconds when at least one person is following it.
+	// Its list of users will be cleared once notified.
+
+	// Observer design pattern:
+	// Subject: Course
+	// Observer: User
+	
+	public Course(String courseCodeString, String courseNumberString, String courseSectionString) {
+		this.courseCodeString = courseCodeString;
+		this.courseNumberString = courseNumberString;
+		this.courseSectionString = courseSectionString;
+		this.URL = "https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=5&dept="
+				+ courseCodeString + "&course=" + courseNumberString + "&section=" + courseSectionString;
+	}
+	
+	public String getURL() {
+		return URL;
+	}
+
+	public String getCourseCodeString() {
+		return courseCodeString;
+	}
+
+	public String getCourseNumberString() {
+		return courseNumberString;
+	}
+
+	public String getCourseSectionString() {
+		return courseSectionString;
+	}
+	
+	public void registerUser(Observer user) {
+		users.add(user);
+	}
+
+	public void unregisterAllUsers() {
+		users.clear();
+	}
+
+	public void notifyAllObservers() {
+		users.forEach(user -> user.update(seatType));
+		unregisterAllUsers();
+	}
+	
+	public void checkCourseAvailability(String checkGeneralSeats, String checkRestrictedSeats) throws InterruptedException {
+		seatType = (checkGeneralSeats.contains("y") && checkRestrictedSeats.contains("n")) ? 0 : 
+			((checkGeneralSeats.contains("n") && checkRestrictedSeats.contains("y")) ? 1 : -1);
+		repeatCheckSeats(seatType);
+	}
+	
+	public void repeatCheckSeats(int seatType) throws InterruptedException {
+		scrapeSeats();
+		if (seatType == -1) {
+			if (seats[0] != 0 || seats[1] != 0) {
+				notifyAllObservers();
+			} else {
+				waitBeforeNextCheck();
+				System.out.println("Course full. Checking availability...");
+				repeatCheckSeats(-1);
+			}
+		} else {
+			if (seats[seatType] != 0) {
+				notifyAllObservers();
+			} else {
+				waitBeforeNextCheck();
+				System.out.println("Course full. Checking availability...");
+				repeatCheckSeats(seatType);
+			}
+		}
+	}
+	
+	public void waitBeforeNextCheck() {
+		try {
+			TimeUnit.SECONDS.sleep(30);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			System.out.println("Failed to wait before performing next availability check.");
+		}
+	}
+	
+	public void scrapeSeats() throws InterruptedException {
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(URL).get();
+		} catch (IOException e) {
+			System.out.println("The course you entered does not have a corresponding webpage. Please enter again:");
+			Main.main(null);
+		}
+		if (doc.title().contains("null")) {
+			System.out.println("The course you entered is invalid. Please enter again:");
+			Main.main(null);
+		}
+		int i = 0;
+		for (Element table : doc.select("table")) {
+			for (Element row : table.select("tr")) {
+				for (Element td : row.select("td")) {
+					String temp = td.getElementsByTag("strong").text();
+					if (i == 17) { generalSeats = Integer.parseInt(temp); }
+					if (i == 19) { restrictedSeats = Integer.parseInt(temp); }
+					i++;
+				}
+			}
+		}
+		int[] array = {generalSeats, restrictedSeats};
+		seats = array;
+	}
+}
