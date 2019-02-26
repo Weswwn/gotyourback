@@ -1,0 +1,62 @@
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class Servlet1
+ */
+
+public class Servlet1 extends HttpServlet {
+
+	String courseCodeString;
+	String courseNumberString;
+	String courseSectionString;
+	String emailAddressString;
+	String phoneNumberString;
+	String checkGeneralSeats;
+	String checkRestrictedSeats;
+
+	@Override
+	protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		courseCodeString = req.getParameter("Subject Code");
+		courseNumberString = req.getParameter("Course Number");
+		courseSectionString = req.getParameter("Course Section");
+		phoneNumberString = req.getParameter("phoneNumbertext");
+		emailAddressString = req.getParameter("emailText");
+		String[] checkboxValues = req.getParameterValues("seat");
+		checkGeneralSeats = (checkboxValues[0] == null) ? "n" : "y" ;
+		checkRestrictedSeats = (checkboxValues[1] == null) ? "n"  : "y" ;
+
+		Main main = new Main();
+		main.setCourseCodeString(courseCodeString);
+		main.setCourseCodeString(courseNumberString);
+		main.setCourseCodeString(courseSectionString);
+		main.setCourseCodeString(phoneNumberString);
+		main.setCourseCodeString(emailAddressString);
+		Course course = main.userInput();
+		try {
+			course.checkCourseAvailability(checkGeneralSeats, checkRestrictedSeats);
+		} catch (InterruptedException e) {
+			// continue
+		}
+	}
+
+	/**
+	 * Default constructor. 
+	 */
+	public Servlet1() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+}
