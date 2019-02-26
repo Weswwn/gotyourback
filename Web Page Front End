@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+    <head> 
+        <meta charset ="utf-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1">
+        <title>GotYourBack</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="script.js"></script>
+		
+		<link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Raleway:Thin">
+		<style>
+        body {
+            font-family: 'Raleway', serif;
+            font-size: 30px;
+        }
+		</style>
+    </head>
+
+    <div id="content">
+        <body>
+            <div id="wrapper">
+                <header>
+                    <center><h1>Got Your Back</h1></center>
+                    <h3>UBC: Summer/Winter 2018-2019</h3>
+                </header>    
+            </div>
+        </body>
+
+        <body>
+            <form id="userForm" action="servlet1" method="post">
+                <div class="FirstStep">
+                    <br>
+                    <center>
+                    <h2>Step 1: Enter the course you want to track</h2>
+
+                    <input type="text" id="subjectCode" name="Subject Code" placeholder="COMM" maxlength="4" style="height: 50px;">
+                    <input type="text" id="courseNumber" name="Course Number" placeholder="101" maxlength="4" style="height: 50px;">
+                    <input type="text" id="courseSection" name="Course Section" placeholder="100" maxlength="4" style="height: 50px;">
+
+                    <br>
+                    General Seats: <input type="checkbox" name="seat" id="generalSeats">
+                    <br>
+                    Restricted Seats: <input type="checkbox" name="seat" id="restrictedSeats">
+                    </center>
+                </div>
+
+                <div class="SecondStep">
+                    <br>
+                    <center>
+                    <h2>Step 2: Provide your phone number or email</h2>
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumbertext" name="phoneNumbertext" placeholder="7781234567" maxlength="10" style="height: 50px; width: 130px;">
+                    </center>
+                </div>
+
+                <div class="ThirdStep">
+                    <center>
+                    <label for="email">Email:</label>
+                    <input type="text" id="emailText" name="emailText" placeholder="example@provider.com" style="height: 50px; width: 265px;">
+                    </center>
+                </div>
+
+                <div class="LastStep">
+                    <br>
+                    <center>
+                    <input id="submitButton" type="submit" value="Submit" style="width: 80px; height: 40px" onClick="processSeats();"/>
+                    </center>
+                </div>
+            </form>
+        </body>
+    </div>
+</html>
